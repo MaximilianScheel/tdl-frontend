@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -6,14 +8,26 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  email: string = '';
   password: string = '';
-
-  constructor() { }
+  username: string = '';
+  constructor(private as: AuthService) { }
 
   ngOnInit(): void {
   }
 
-  login(){}
+  async login() {
+
+    try {
+      let resp = await this.as.loginWithUsernameAndPassword(this.username, this.password);
+      console.log(resp);
+      // TODO: Redirect
+    } catch (e) {
+      // Show error message
+      console.error(e);
+
+    }
+  }
+
+  
 
 }
