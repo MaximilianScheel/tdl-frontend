@@ -1,4 +1,7 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { lastValueFrom } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-all-todos',
@@ -6,10 +9,24 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./all-todos.component.scss']
 })
 export class AllTodosComponent implements OnInit {
+  todos: any = [];
+  error = '';
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    try {
+      this.todos = await this.loadTodos();
+      console.log(this.todos);
+    } catch (e) {
+      this.error = 'Fehler beim Laden der Todos!'
+    }
+  }
+
+  loadTodos() {
+    const url = environment.baseUrl + "/todos/";
+    return lastValueFrom(this.http.get(url, {
+    }));
   }
 
 }
